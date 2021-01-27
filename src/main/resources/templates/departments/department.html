@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/main_layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>DOCTORS - ECMS</title>
+</head>
+<body>
+
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <div class="card">
+            <div class="card-header">
+                <h2>Eden Clinic Doctors in <span th:text="${department.getName()}"></span> </h2>
+            </div>
+            <div class="list-group card-body">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Action</th>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                    <tr th:each="doctor:  ${department.getDoctors()}">
+                        <td th:text="${doctor.getUser().getFirstName()} + ' ' + ${doctor.getUser().getLastName()}">Doctor 1</td>
+                        <td class="d-flex justify-content-between">
+                            <a th:href="@{/doctors/{id}(id = ${doctor.getId()})}" class="btn btn-secondary">View</a>
+                            <a th:href="@{/book/doctor/{doctorId} (doctorId=${doctor.getId()})}" class="btn btn-success">Book</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Please provide your details in the registration section before making a booking!
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    <a th:href="@{/auth/register(departmentid=${department.getId()})}" class="btn btn-success">Continue with registration</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

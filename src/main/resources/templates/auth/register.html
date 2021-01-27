@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/main_layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>REGISTER - ECMS</title>
+</head>
+<body>
+
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <form method="post" th:action="@{/auth/register}" th:object="${signUpRequest}" autocomplete="off">
+            <div th:if="${param.success}">
+                <div class="alert alert-info">
+                    You've successfully registered an account. You can now login with your credentials!
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="firstName" class="col-sm-2 col-form-label">Fist Name</label>
+                <div class="col-sm-10">
+                    <input type="text" name="firstName" th:field="*{firstName}" required class="form-control" id="firstName">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="lastName" class="col-sm-2 col-form-label">Last Name</label>
+                <div class="col-sm-10">
+                    <input type="text" name="lastName" th:field="*{lastName}" required class="form-control" id="lastName">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="email" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" th:field="*{email}" required id="email" name="email">
+                    <small class="error text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="password" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                    <input type="password" required name="password" th:field="*{password}" class="form-control" id="password">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+            <span>Have an account? <a href="/" th:href="@{/auth/login}">Login</a> </span>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

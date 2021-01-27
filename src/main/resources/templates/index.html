@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/main_layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>HOME - ECMS</title>
+</head>
+<body>
+
+
+
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <div class="card">
+            <div class="card-header">
+                <h2>Welcome To Eden Clinic</h2>
+            </div>
+            <div class="list-group card-body">
+                <a href="/departments" class="list-group-item list-group-item-action">Departments</a>
+                <a href="/doctors" class="list-group-item list-group-item-action">Doctors</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/main_layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>DOCTORS - ECMS</title>
+</head>
+<body>
+
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <div class="card">
+            <div class="card-header">
+                <h2>Eden Clinic Departments</h2>
+            </div>
+            <div class="list-group card-body">
+                <div sec:authorize="hasAnyRole('ROLE_MANAGER')">
+                    <p>
+                        <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            Add Department
+                        </button>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+                            <form method="post" th:action="@{/departments/add}" th:object="${addDepartmentRequest}" autocomplete="off">
+                                <div class="row mb-3">
+                                    <label for="departmentName" class="col-sm-2 col-form-label">Department Name</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="departmentName" th:field="*{departmentName}">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <button class="btn btn-primary btn-sm " type="submit">Add Department</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Action</th>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                    <tr th:each="department: ${allDepartments}">
+                        <td th:text="${department.name}"></td>
+                        <td class="d-flex justify-content-between">
+                            <a th:href="@{/department/{departmentid}(departmentid = ${department.id})}" class="btn btn-secondary">View</a>
+                            <a sec:authorize="isAuthenticated()" th:href="@{/booking/department/{id}(id = ${department.id})}" class="btn btn-success">Book</a>
+                            <button sec:authorize="!isAuthenticated()" id="book-registration-btn" data-departmentid="2" th:attr="data-departmentid=${department.id}" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                Book
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Please provide your details in the registration section before making a booking!
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    <a th:href="@{/auth/register?department_id=8}" id="ln-continue-registration" class="btn btn-success">Continue with registration</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<th:block layout:fragment="javascript">
+    <script type="text/javascript">
+        $("#book-registration-btn").click(
+            (element)=>{
+                let departmentId = element.target.dataset.departmentid;
+                $("#ln-continue-registration").attr("href","/auth/register?" + departmentId);
+            }
+        )
+    </script>
+</th:block>
+
+</body>
+</html>

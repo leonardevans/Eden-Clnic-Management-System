@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/main_layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>DOCTOR - ECMS</title>
+</head>
+<body>
+
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <div class="card">
+            <div class="card-header">
+                <h2>Eden Clinic Doctor</h2>
+            </div>
+            <div class="list-group card-body">
+                <div sec:authorize="hasAnyRole('doctor')">
+                    <p>
+                        <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            Add Available Time
+                        </button>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body" sec:authorize="hasAnyRole('ROLE_DOCTOR')">
+                            <form th:action="@{/doctor/addTimeAvailable}" method="post" th:object="${addTimeAvailableRequest}">
+                                <label for="doctorId"></label>
+                                <input style="display: none" type="text" class="form-control form-control-sm" name="doctorId" th:value="${doctor.getId()}" required id="doctorId" >
+                                <div class="row mb-3">
+                                    <label for="date" class="col-sm-2 col-form-label col-form-label-sm">Date</label>
+                                    <div class="col-sm-10">
+                                        <input type="date" class="form-control form-control-sm" th:field="*{date}" required id="date" >
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="timeFrom" class="col-sm-2 col-form-label col-form-label-sm">From</label>
+                                    <div class="col-sm-10">
+                                        <input type="time" class="form-control form-control-sm" th:field="*{timeFrom}" required id="timeFrom" >
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="timeTo" class="col-sm-2 col-form-label col-form-label-sm">To</label>
+                                    <div class="col-sm-10">
+                                        <input type="time" class="form-control form-control-sm" th:field="*{timeTo}" required id="timeTo" >
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <button class="btn btn-primary btn-sm " type="submit">Add</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        Details
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Department</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td th:text="${doctor.getUser().getFirstName()} + ' ' + ${doctor.getUser().getLastName()}"></td>
+                                <td>
+                                    <span th:each="department:  ${doctor.getDepartments()}" th:text="${department.getName()} + ', '"></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <h4>Available time</h4>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <td>Action</td>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                    <tr th:each="timeAvailable : ${doctor.getTimeAvailables()}">
+                        <td th:text="${timeAvailable.getDate()}"></td>
+                        <td th:text="${timeAvailable.getTimeFrom()}"></td>
+                        <td th:text="${timeAvailable.getTimeTo()}"></td>
+                        <td>
+                            <a th:href="@{/book/time/{timeAvailableId} (timeAvailableId=${timeAvailable.getId()})}" class="btn btn-success">Book</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Please provide your details in the registration section before making a booking!
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    <a th:href="@{/auth/register}" class="btn btn-success">Continue with registration</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

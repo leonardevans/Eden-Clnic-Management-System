@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/main_layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>BOOKINGS - ECMS</title>
+</head>
+<body>
+
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <div class="card">
+            <div class="card-header">
+                <h2>Eden Clinic Bookings</h2>
+            </div>
+            <div class="list-group card-body">
+                <div class="mb-4" >
+                    <h4 >As Doctor</h4>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Doctor</th>
+                            <th>Department</th>
+                            <th>Patient</th>
+                            <th>Date</th>
+                            <th>From</th>
+                            <th>To</th>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+                        <tr th:each="booking : ${allBookings}">
+                            <td th:text="${booking.getTimeAvailable().getDoctor().getUser().getFirstName()} + ' ' + ${booking.getTimeAvailable().getDoctor().getUser().getLastName()}">Dr Ken</td>
+                            <td >
+                                <span th:each="department : ${booking.getTimeAvailable().getDoctor().getDepartments()}" th:text="${department.getName()}"></span>
+                            </td>
+                            <td th:text="${booking.getUser().getFirstName()} + ' ' + ${booking.getUser().getLastName()}">Kendi</td>
+                            <td th:text="${booking.getTimeAvailable().getDate()}">2021/01/21</td>
+                            <td th:text="${booking.getTimeAvailable().getTimeFrom()}">2pm</td>
+                            <td th:text="${booking.getTimeAvailable().getTimeTo()}">4am</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
